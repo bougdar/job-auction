@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import Users from "../models/Users.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens.js";
 
-
+import { OAuth2Client } from "google-auth-library";
 
 // (email/password)
 export const register = async (req, res) => {
@@ -22,25 +22,25 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+    try {
+        const { email, password } = req.body;
 
-    const user = await Users.findOne({ email });
-    if (!user) return res.status(404).json({ message: "User not found" });
+        const user = await Users.findOne({ email });
+        if (!user) return res.status(404).json({ message: "User not found" });
 
-    const valid = await bcrypt.compare(password, user.password);
-    if (!valid) return res.status(400).json({ message: "Wrong password" });
+        const valid = await bcrypt.compare(password, user.password);
+        if (!valid) return res.status(400).json({ message: "Wrong password" });
 
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
 
-    res.json({ user, accessToken, refreshToken });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+        res.json({ user, accessToken, refreshToken });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
 
-
+// (refreshToken)
 export const refreshToken = (req, res) => {
 
     const { token } = req.body;
@@ -55,4 +55,33 @@ export const refreshToken = (req, res) => {
         res.status(403).json({ message: "Invalid refresh token" });
     }
 
+};
+
+// (google)
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+export const googleLogin = async (req, res) => {
+    try {
+        const { token } = req.body;
+        const ticket = await googleClient.verifyIdToken({ idToken: token, audience: process.env.GOOGLE_CLIENT_ID });
+        const payload = ticket.getPayload();
+
+        let user = await Users.findOne({ email: payload.email });
+        if (!user) {
+            user = await Users.create({
+                firstname: payload.given_name,
+                lastname: payload.family_name,
+                email: payload.email,
+                provider: "google",
+                googleId: payload.sub,
+            });
+        }
+
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+
+        res.json({ user, accessToken, refreshToken });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
