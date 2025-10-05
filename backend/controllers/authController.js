@@ -3,6 +3,9 @@ import jwt from "jsonwebtoken";
 import Users from "../models/Users.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens.js";
 
+
+
+// (email/password)
 export const register = async (req, res) => {
     try {
         const { firstname, lastname, adress, phone, email, password } = req.body;
@@ -16,7 +19,26 @@ export const register = async (req, res) => {
         res.status(201).json({ user, accessToken, refreshToken });
     }
     catch (error) { res.status(500).json({ message: error.message }) }
-}
+};
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await Users.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) return res.status(400).json({ message: "Wrong password" });
+
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    res.json({ user, accessToken, refreshToken });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
 export const refreshToken = (req, res) => {
