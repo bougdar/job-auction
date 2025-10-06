@@ -5,6 +5,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/connect.js"; 
 import authRoutes from "./routers/authRoutes.js"
+import categoryRoutes from "./routers/categoryRoutes.js";
+
 dotenv.config();
 
 const app = express();
@@ -19,7 +21,9 @@ app.get("/", (req, res) => {
   res.send("Hello MERN backend 🚀");
 });
 
-app.use("/api/auth",authRoutes)
+app.use("/api/auth",authRoutes);
+app.use("/api/categories", categoryRoutes);
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, "0.0.0.0", () => {
