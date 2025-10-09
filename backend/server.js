@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/connect.js"; 
 import authRoutes from "./routers/authRoutes.js"
 import categoryRoutes from "./routers/categoryRoutes.js";
-
+import auctionRoutes from "./routers/auctionRoutes.js"
 dotenv.config();
 
 const app = express();
@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth",authRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/auctions", auctionRoutes);
 
 const PORT = process.env.PORT || 5000;
 
