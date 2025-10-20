@@ -7,14 +7,15 @@ import {
   deletedAction,
   bidInAction,
 } from "../controllers/auctionController.js";
+import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", createAction);
-router.get("/", getAllAction);
-router.get("/:id", getByIdAction);
-router.put("/:id", updateAction);
-router.delete("/:id", deletedAction);
-router.post("/bid/:id", bidInAction);
+router.post("/", protect, createAction);
+router.get("/", protect, getAllAction);
+router.get("/:id", protect, getByIdAction);
+router.put("/:id", protect, updateAction);
+router.delete("/:id", protect, deletedAction);
+router.post("/bid/:id", protect, bidInAction);
 
 export default router;

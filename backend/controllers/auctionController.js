@@ -3,9 +3,11 @@ import Auction from "../models/Auction.js";
 export const createAction = async (req, res) => {
     try {
         const { name, description, images, adress, maxprice } = req.body;
+        const userId = req.user.id;
+
         if (!name || !description || !images || !adress || !maxprice) return res.status(400).json({ message: "All fields are required" });
 
-        const newAuction = new Auction({ name, description, images, adress, maxprice });
+        const newAuction = new Auction({ name, description, images, adress, maxprice, creator: userId });
         await newAuction.save();
         res.status(201).json(newAuction);
     } catch (error) {
@@ -76,27 +78,29 @@ export const deletedAction = async (req, res) => {
 }
 
 export const bidInAction = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { newBid } = req.body;
-    const io = req.app.get("io");
+    try {
+        const { id } = req.params;
+        const { newBid } = req.body;
+        const userId = req.user.id;
+        const io = req.app.get("io");
 
-    const auction = await Auction.findById(id);
-    if (!auction) return res.status(404).json({ message: "Auction not found" });
+        const auction = await Auction.findById(id);
+        if (!auction) return res.status(404).json({ message: "Auction not found" });
 
-    if (newBid >= auction.auctionprice)
-      return res.status(400).json({ message: "Bid must be lower than current price" });
+        if (newBid >= auction.auctionprice)
+            return res.status(400).json({ message: "Bid must be lower than current price" });
 
-    auction.auctionprice = newBid;
-    await auction.save();
+        auction.auctionprice = newBid;
+        auction.lastBidder = userId;
+        await auction.save();
 
-    io.emit("auctionUpdated", {
-      id: auction._id,
-      auctionprice: auction.auctionprice,
-    });
+        io.emit("auctionUpdated", {
+            id: auction._id,
+            auctionprice: auction.auctionprice,
+        });
 
-    res.status(200).json({ message: "Bid placed successfully", auction });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+        res.status(200).json({ message: "Bid placed successfully", auction });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };

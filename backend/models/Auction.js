@@ -6,7 +6,9 @@ const auctionSchema = new mongoose.Schema({
     images: {type: String},
     adress: {type:String},
     maxprice:{type:Number},
-    auctionprice:{type:Number}
+    auctionprice:{type:Number},
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: "Users", required: true },
+    lastBidder: { type: mongoose.Schema.Types.ObjectId, ref: "Users" }
 })
 
 export default mongoose.model("Auction",auctionSchema)
