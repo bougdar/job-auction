@@ -1,4 +1,5 @@
 import Auction from "../models/Auction.js";
+import cron from "node-cron";
 
 export const createAction = async (req, res) => {
     try {
@@ -78,29 +79,44 @@ export const deletedAction = async (req, res) => {
 }
 
 export const bidInAction = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { newBid } = req.body;
-        const userId = req.user.id;
-        const io = req.app.get("io");
+  try {
+    const { newBid } = req.body;
+    const userId = req.user.id;
+    const io = req.app.get("io");
 
-        const auction = await Auction.findById(id);
-        if (!auction) return res.status(404).json({ message: "Auction not found" });
+    const auction = req.auction;
 
-        if (newBid >= auction.auctionprice)
-            return res.status(400).json({ message: "Bid must be lower than current price" });
-
-        auction.auctionprice = newBid;
-        auction.lastBidder = userId;
-        await auction.save();
-
-        io.emit("auctionUpdated", {
-            id: auction._id,
-            auctionprice: auction.auctionprice,
-        });
-
-        res.status(200).json({ message: "Bid placed successfully", auction });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+    if (newBid >= auction.auctionprice) {
+      return res.status(400).json({ message: "Bid must be lower than current price" });
     }
+
+    auction.auctionprice = newBid;
+    auction.lastBidder = userId;
+    await auction.save();
+
+    io.emit("auctionUpdated", {
+      id: auction._id,
+      auctionprice: auction.auctionprice,
+    });
+
+    res.status(200).json({ message: "Bid placed successfully", auction });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
+
+cron.schedule("0 * * * *", async () => {
+  try {
+    const now = new Date();
+    const expiredAuctions = await Auction.updateMany(
+      { etat: "on", createdAt: { $lte: new Date(now - 24*60*60*1000) } },
+      { etat: "off" }
+    );
+
+    if (expiredAuctions.modifiedCount > 0) {
+      console.log(`Auctions updated to 'off': ${expiredAuctions.modifiedCount}`);
+    }
+  } catch (err) {
+    console.error("Error updating auction etat:", err);
+  }
+});
