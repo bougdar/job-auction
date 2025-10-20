@@ -76,9 +76,27 @@ export const deletedAction = async (req, res) => {
 }
 
 export const bidInAction = async (req, res) => {
-    try {
+  try {
+    const { id } = req.params;
+    const { newBid } = req.body;
+    const io = req.app.get("io");
 
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
+    const auction = await Auction.findById(id);
+    if (!auction) return res.status(404).json({ message: "Auction not found" });
+
+    if (newBid >= auction.auctionprice)
+      return res.status(400).json({ message: "Bid must be lower than current price" });
+
+    auction.auctionprice = newBid;
+    await auction.save();
+
+    io.emit("auctionUpdated", {
+      id: auction._id,
+      auctionprice: auction.auctionprice,
+    });
+
+    res.status(200).json({ message: "Bid placed successfully", auction });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
