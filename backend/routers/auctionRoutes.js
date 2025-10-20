@@ -6,6 +6,7 @@ import {
   updateAction,
   deletedAction,
   bidInAction,
+  getActionEtatOn
 } from "../controllers/auctionController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import { checkAuctionOpen } from "../middlewares/auctionMiddleware.js";
@@ -13,6 +14,7 @@ import { checkAuctionOpen } from "../middlewares/auctionMiddleware.js";
 const router = express.Router();
 
 router.post("/", protect, createAction);
+router.get("/etat/on", protect, getActionEtatOn);
 router.get("/", protect, getAllAction);
 router.get("/:id", protect, getByIdAction);
 router.put("/:id", protect, updateAction);
