@@ -49,26 +49,17 @@ export const getByIdAction = async (req, res) => {
 export const updateAction = async (req, res) => {
     try {
         const { name, description, images, address, maxprice, auctionprice } = req.body;
+        const auction = req.auction;
 
-        const existingAction = await Auction.findById(req.params.id);
-        if (!existingAction) {
-            return res.status(404).json({ message: "Action not found." });
-        }
+        if (name) auction.name = name;
+        if (description) auction.description = description;
+        if (images) auction.images = images;
+        if (address) auction.address = address;
+        if (maxprice) auction.maxprice = maxprice;
+        if (auctionprice) auction.auctionprice = auctionprice;
 
-        // Only update fields if they exist in the request
-        if (name) existingAction.name = name;
-        if (description) existingAction.description = description;
-        if (images) existingAction.images = images;
-        if (address) existingAction.address = address;
-        if (maxprice) existingAction.maxprice = maxprice;
-        if (auctionprice) existingAction.auctionprice = auctionprice;
-
-        const updatedAction = await existingAction.save();
-
-        res.status(200).json({
-            message: "Action updated successfully.",
-            action: updatedAction,
-        });
+        const updatedAuction = await auction.save();
+        res.status(200).json({ message: "Auction updated successfully.", auction: updatedAuction });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -76,17 +67,16 @@ export const updateAction = async (req, res) => {
 
 
 
+
 export const deletedAction = async (req, res) => {
     try {
-        const deletedAction = await Auction.findByIdAndDelete(req.params.id);
-        if (!deletedAction)
-            return res.status(404).json({ message: "not found" });
-        res.status(200).json({ message: "Auction deleted successfully" });
-
+        await req.auction.deleteOne();
+        res.status(200).json({ message: "Auction deleted successfully." });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+};
+
 
 export const bidInAction = async (req, res) => {
     try {

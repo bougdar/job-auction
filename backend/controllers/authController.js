@@ -40,21 +40,21 @@ export const login = async (req, res) => {
     }
 };
 
-// (refreshToken)
-export const refreshToken = (req, res) => {
-
+export const refreshToken = async (req, res) => {
     const { token } = req.body;
-
     if (!token) return res.status(401).json({ message: "No token provided" });
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-        const accessToken = jwt.sign({ id: decoded.id }, process.env.JWT_SECRET, { expiresIn: "15m" });
-        res.json({ accessToken });
-    } catch (error) {
-        res.status(403).json({ message: "Invalid refresh token" });
-    }
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await Users.findById(decoded.id);
+        if (!user) return res.status(404).json({ message: "User not found" });
 
+        const newAccessToken = generateAccessToken(user);
+
+        res.json({ accessToken: newAccessToken });
+    } catch (error) {
+        res.status(403).json({ message: "Invalid or expired refresh token" });
+    }
 };
 
 // (google)

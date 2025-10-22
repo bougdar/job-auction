@@ -9,6 +9,11 @@ const userSchema = new mongoose.Schema({
     provider: { type: String, default: "local" },
     googleId: { type: String },
     facebookId: { type: String },
+    role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: "user"
+    }
 }, { timestamps: true });
 
 export default mongoose.model("Users", userSchema);
