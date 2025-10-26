@@ -1,0 +1,33 @@
+.topnav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0a2a66;
+  overflow: hidden;
+  width: 100%;
+  border-bottom: 2px solid #0d3b91;
+}
+
+.left,
+.right {
+  display: flex;
+}
+
+.link {
+  color: #ffffff;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+  font-size: 17px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.link:hover {
+  background-color: #1a4fb8;
+  color: #ffffff;
+}
+
+.link.active {
+  background-color: #0d3b91;
+  color: #ffffff;
+}
