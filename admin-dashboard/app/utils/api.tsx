@@ -30,3 +30,31 @@ export async function fetchWithAuth(url: string, options: any = {}) {
 
   return res;
 }
+export const getToken = (): string | null => {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("accessToken");
+};
+
+export const isLoggedIn = (): boolean => {
+  const token = getToken();
+  if (!token) return false;
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return !!payload;
+  } catch {
+    return false;
+  }
+};
+
+export const isAdmin = (): boolean => {
+  const token = getToken();
+  if (!token) return false;
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.role === "admin";
+  } catch {
+    return false;
+  }
+};

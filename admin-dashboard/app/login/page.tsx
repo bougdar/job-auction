@@ -1,11 +1,13 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./Login.module.css";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +42,7 @@ export default function LoginPage() {
 
       localStorage.setItem("accessToken", data.accessToken);
       alert("✅ Login successful!");
-      window.location.href = "/dashboard";
+      router.push("/dashboard");
     } catch (err) {
       console.error(err);
       setError("Something went wrong.");

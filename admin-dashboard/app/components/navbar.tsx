@@ -7,6 +7,9 @@ export default function Navbar() {
   return (
     <nav className={styles.topnav}>
       <div className={styles.left}>
+        <Link href="/dashboard" className={styles.link}>
+          dashboard
+        </Link>
         <Link href="/dashboard/users" className={styles.link}>
           Users
         </Link>
