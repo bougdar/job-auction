@@ -41,7 +41,7 @@ export default function LoginPage() {
       }
 
       localStorage.setItem("accessToken", data.accessToken);
-      alert("✅ Login successful!");
+
       router.push("/dashboard");
     } catch (err) {
       console.error(err);

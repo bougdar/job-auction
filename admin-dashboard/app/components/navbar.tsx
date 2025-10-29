@@ -21,9 +21,14 @@ export default function Navbar() {
         </Link>
       </div>
       <div className={styles.right}>
-        <Link href="/logout" className={styles.link}>
+        <Link
+          href="/login"
+          className={styles.link}
+          onClick={() => localStorage.removeItem("accessToken")}
+        >
           Logout
         </Link>
+
       </div>
     </nav>
   );
