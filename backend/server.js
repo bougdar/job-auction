@@ -9,6 +9,7 @@ import categoryRoutes from "./routers/categoryRoutes.js";
 import auctionRoutes from "./routers/auctionRoutes.js"
 import http from "http";
 import { Server } from "socket.io";
+
 dotenv.config();
 
 const app = express();
@@ -19,9 +20,12 @@ const io = new Server(server, {
   },
 });
 
-app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true,
+}));
 app.set("io", io);
 connectDB();
 
