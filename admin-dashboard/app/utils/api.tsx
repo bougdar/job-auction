@@ -12,7 +12,7 @@ export async function fetchWithAuth(url: string, options: any = {}) {
 
   if (res.status === 403) {
 
-    const refreshRes = await fetch("http://localhost:5000/api/auth/refresh", {
+    const refreshRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`, {
       method: "POST",
       credentials: "include",
     });

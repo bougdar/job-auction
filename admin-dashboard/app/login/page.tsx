@@ -12,7 +12,7 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -20,8 +20,21 @@ export default function LoginPage() {
       });
 
       const data = await res.json();
+
       if (!res.ok) {
         setError(data.message || "Login failed");
+        return;
+      }
+
+      try {
+        const payload = JSON.parse(atob(data.accessToken.split(".")[1]));
+        if (payload.role !== "admin") {
+          setError("Access denied. Admins only.");
+          localStorage.removeItem("accessToken");
+          return;
+        }
+      } catch {
+        setError("Invalid token received.");
         return;
       }
 
@@ -29,6 +42,7 @@ export default function LoginPage() {
       alert("✅ Login successful!");
       window.location.href = "/dashboard";
     } catch (err) {
+      console.error(err);
       setError("Something went wrong.");
     }
   };
@@ -36,7 +50,7 @@ export default function LoginPage() {
   return (
     <div className={styles.container}>
       <div className={styles.formWrapper}>
-        <h1 className={styles.title}>Login</h1>
+        <h1 className={styles.title}>Admin Login</h1>
         <form className={styles.form} onSubmit={handleSubmit}>
           <label className={styles.label}>
             Email
@@ -45,6 +59,7 @@ export default function LoginPage() {
               className={styles.input}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </label>
           <label className={styles.label}>
@@ -54,10 +69,15 @@ export default function LoginPage() {
               className={styles.input}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </label>
+
           {error && <p className={styles.error}>{error}</p>}
-          <button type="submit" className={styles.submitBtn}>Login</button>
+
+          <button type="submit" className={styles.submitBtn}>
+            Login
+          </button>
         </form>
       </div>
     </div>
