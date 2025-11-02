@@ -7,7 +7,7 @@ export default function UsersList() {
     <div className={styles.pageContainer}>
       <div className={styles.header}>
         <h1 className={styles.title}>Auctions Page</h1>
-        <button className={styles.addBtn}>Auction User</button>
+        <button className={styles.addBtn}>Add Auction</button>
       </div>
 
       <div className={styles.tableContainer}>

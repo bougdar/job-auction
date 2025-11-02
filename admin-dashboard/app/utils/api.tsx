@@ -30,6 +30,7 @@ export async function fetchWithAuth(url: string, options: any = {}) {
 
   return res;
 }
+
 export const getToken = (): string | null => {
   if (typeof window === "undefined") return null;
   return localStorage.getItem("accessToken");
