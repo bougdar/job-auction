@@ -3,20 +3,17 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./List.module.css";
+import { fetchWithAuth } from "@/app/utils/api";
 
 export default function CategoriesList() {
   const [categories, setCategories] = useState<any[]>([]);
 
   const fetchCategories = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
-        credentials: "include",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`);
       const data = await res.json();
-      setCategories(data);
+
+      setCategories(Array.isArray(data) ? data : data.categories || []);
     } catch (err) {
       console.error(err);
     }
@@ -25,11 +22,8 @@ export default function CategoriesList() {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure?")) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/${id}`, {
+      await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
       });
       fetchCategories();
     } catch (err) {
