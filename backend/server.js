@@ -7,6 +7,7 @@ import connectDB from "./config/connect.js";
 import authRoutes from "./routers/authRoutes.js"
 import categoryRoutes from "./routers/categoryRoutes.js";
 import auctionRoutes from "./routers/auctionRoutes.js"
+import userRoute from "./routers/userRoutes.js"
 import http from "http";
 import { Server } from "socket.io";
 
@@ -36,8 +37,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth",authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/auctions", auctionRoutes);
-
-
+app.use('/api/users', userRoute);
 
 io.on("connection", (socket) => {
   console.log("New client connected:", socket.id);

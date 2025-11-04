@@ -6,12 +6,12 @@ import { OAuth2Client } from "google-auth-library";
 
 export const register = async (req, res) => {
   try {
-    const { firstname, lastname, adress, phone, email, password } = req.body;
+    const { firstname, lastname, address, phone, email, password } = req.body;
     const existing = await Users.findOne({ email });
     if (existing) return res.status(400).json({ message: "User already exists" });
 
     const hashed = await bcrypt.hash(password, 10);
-    const user = await Users.create({ firstname, lastname, adress, phone, email, password: hashed });
+    const user = await Users.create({ firstname, lastname, address, phone, email, password: hashed });
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);

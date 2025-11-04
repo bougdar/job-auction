@@ -12,7 +12,7 @@
 .title {
   font-size: 28px;
   font-weight: bold;
-  color: #0a2a66; /* dark blue */
+  color: #0a2a66;
 }
 
 .addBtn {
@@ -24,8 +24,6 @@
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  text-decoration: none; /* remove underline */
-  display: inline-block; /* keep padding correct */
 }
 
 .addBtn:hover {
@@ -44,18 +42,18 @@
 }
 
 .theadDark th {
-  background-color: #0a2a66; /* dark blue header */
+  background-color: #0a2a66;
   color: #ffffff;
   padding: 12px 16px;
   text-align: left;
 }
 
 .row {
-  background-color: #ffffff; /* white rows */
+  background-color: #ffffff;
 }
 
 .row:hover {
-  background-color: #e0ecff; /* light blue hover */
+  background-color: #e0ecff;
 }
 
 .row th,
@@ -77,8 +75,6 @@
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.2s ease;
-  text-decoration: none; /* remove underline */
-  display: inline-block;
 }
 
 .view {
@@ -104,4 +100,53 @@
 
 .delete:hover {
   background-color: #b02a37;
+}
+
+/* ----------- FORM & INPUT STYLING ----------- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 400px;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.input {
+  padding: 10px 14px;
+  border: 1px solid #c5d3f0;
+  border-radius: 6px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.2s ease;
+  background-color: #f8faff;
+}
+
+.input:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+  background-color: #ffffff;
+}
+
+.input::placeholder {
+  color: #8a9ab8;
+}
+
+.submitBtn {
+  background-color: #1a73e8;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submitBtn:hover {
+  background-color: #155ab6;
 }
