@@ -5,7 +5,7 @@ const auctionSchema = new mongoose.Schema({
     description: { type: String },
     images: { type: String },
     etat: { type: String, default: "on" },
-    adress: { type: String },
+    address: { type: String },
     maxprice: { type: Number },
     auctionprice: { type: Number },
     creator: { type: mongoose.Schema.Types.ObjectId, ref: "Users", required: true },

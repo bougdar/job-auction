@@ -3,18 +3,19 @@ import cron from "node-cron";
 
 export const createAction = async (req, res) => {
     try {
-        const { name, description, images, adress, maxprice } = req.body;
+        const { name, description, images, address, maxprice } = req.body;
         const userId = req.user.id;
 
-        if (!name || !description || !images || !adress || !maxprice) return res.status(400).json({ message: "All fields are required" });
+        if (!name || !description || !images || !address || !maxprice) 
+            return res.status(400).json({ message: "All fields are required" });
 
-        const newAuction = new Auction({ name, description, images, adress, maxprice, creator: userId });
+        const newAuction = new Auction({ name, description, images, address, maxprice, creator: userId });
         await newAuction.save();
         res.status(201).json(newAuction);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const getAllAction = async (req, res) => {
     try {
@@ -65,9 +66,6 @@ export const updateAction = async (req, res) => {
     }
 };
 
-
-
-
 export const deletedAction = async (req, res) => {
     try {
         await req.auction.deleteOne();
@@ -76,7 +74,6 @@ export const deletedAction = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
 
 export const bidInAction = async (req, res) => {
     try {
