@@ -94,22 +94,35 @@ export const deleteUser = async (req, res) => {
 
 
 export const updateProfile = async (req, res) => {
-    try {
-        const user = await Users.findById(req.user.id);
-        if (!user) return res.status(404).json({ message: "User not found" });
+  try {
+    const user = await Users.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-        const { firstname, lastname, address, phone, email, password } = req.body;
+    const { firstname, lastname, address, phone, email, password } = req.body;
 
-        if (firstname) user.firstname = firstname;
-        if (lastname) user.lastname = lastname;
-        if (address) user.address = address;
-        if (phone) user.phone = phone;
-        if (email) user.email = email;
-        if (password) user.password = await bcrypt.hash(password, 10);
+    if (firstname) user.firstname = firstname;
+    if (lastname) user.lastname = lastname;
+    if (address) user.address = address;
+    if (phone) user.phone = phone;
+    if (email) user.email = email;
+    if (password) user.password = await bcrypt.hash(password, 10);
 
-        const updatedUser = await user.save();
-        res.status(200).json({ message: "Profile updated successfully", user: updatedUser });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+    const updatedUser = await user.save();
+    const { password: _, ...userWithoutPassword } = updatedUser.toObject();
+
+    res.status(200).json({ message: "Profile updated successfully", user: userWithoutPassword });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+export const getProfile = async (req, res) => {
+  try {
+    const user = await Users.findById(req.user.id).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

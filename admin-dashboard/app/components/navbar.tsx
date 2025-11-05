@@ -10,6 +10,9 @@ export default function Navbar() {
         <Link href="/dashboard" className={styles.link}>
           dashboard
         </Link>
+        <Link href="/dashboard/profile" className={styles.link}>
+          Profile
+        </Link>
         <Link href="/dashboard/users" className={styles.link}>
           Users
         </Link>
