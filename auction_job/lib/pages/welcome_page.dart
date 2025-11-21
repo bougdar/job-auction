@@ -27,9 +27,7 @@ class WelcomePage extends StatelessWidget {
                 ),
               ),
             ),
-
             SizedBox(height: 250.h),
-
             Container(
               width: 358.w,
               height: 56.h,
