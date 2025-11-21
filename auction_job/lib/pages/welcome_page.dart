@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -28,36 +29,41 @@ class WelcomePage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 250.h),
-            Container(
-              width: 358.w,
-              height: 56.h,
-              decoration: BoxDecoration(
-                color: Color(0xFFEC7F13),
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x4CEC7F13),
-                    blurRadius: 6,
-                    offset: Offset(0, 4),
-                    spreadRadius: -4,
-                  ),
-                  BoxShadow(
-                    color: Color(0x4CEC7F13),
-                    blurRadius: 15,
-                    offset: Offset(0, 10),
-                    spreadRadius: -3,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Text(
-                  'Get Started',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.27,
+            GestureDetector(
+              onTap: () {
+                Get.toNamed('/loginpage');
+              },
+              child: Container(
+                width: 358.w,
+                height: 56.h,
+                decoration: BoxDecoration(
+                  color: Color(0xFFEC7F13),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x4CEC7F13),
+                      blurRadius: 6,
+                      offset: Offset(0, 4),
+                      spreadRadius: -4,
+                    ),
+                    BoxShadow(
+                      color: Color(0x4CEC7F13),
+                      blurRadius: 15,
+                      offset: Offset(0, 10),
+                      spreadRadius: -3,
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Text(
+                    'Get Started',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.27,
+                    ),
                   ),
                 ),
               ),

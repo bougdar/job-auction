@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -323,23 +324,26 @@ class LoginPage extends StatelessWidget {
             ),
             SizedBox(height: 33.h),
             SizedBox(
-              width: 212.97.h,
-              height: 17.w,
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Dont have an account? ',
-                      style: TextStyle(
-                        color: const Color(0xFF888888),
-                        fontSize: 14,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                        height: 1.43,
-                      ),
+              height: 17.h,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Already have an account? ",
+                    style: TextStyle(
+                      color: const Color(0xFF888888),
+                      fontSize: 14,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w400,
+                      height: 1.43,
                     ),
-                    TextSpan(
-                      text: 'Sign Up',
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed('/registerpage');
+                    },
+                    child: Text(
+                      "Sign Up",
                       style: TextStyle(
                         color: const Color(0xFFEC7F13),
                         fontSize: 14,
@@ -350,9 +354,8 @@ class LoginPage extends StatelessWidget {
                         height: 1.43,
                       ),
                     ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
           ],
