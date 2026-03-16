@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Auction Job',
           theme: ThemeData(scaffoldBackgroundColor: Colors.white),
-          initialRoute: AppRoutes.welcome,
+          initialRoute: AppRoutes.homepage,
           getPages: AppRoutes.pages,
         );
       },
